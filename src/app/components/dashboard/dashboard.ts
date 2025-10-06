@@ -59,7 +59,7 @@ export class Dashboard {
 	readonly topCategories = computed(() => {
 		const counter = new Map<string, number>();
 		(this.books()?.contenido ?? []).forEach((book) => {
-			counter.set(book.category, (counter.get(book.category) ?? 0) + 1);
+			counter.set(book.categoria, (counter.get(book.categoria) ?? 0) + 1);
 		});
 		return Array.from(counter.entries())
 			.map(([category, count]) => ({ category, count }))

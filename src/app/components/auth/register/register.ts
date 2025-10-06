@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { finalize } from 'rxjs';
 import { UserRole } from '../../../core/models/user.model';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -12,12 +12,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
-import { LowerCasePipe } from '@angular/common';
+import { LowerCasePipe, NgFor, NgIf } from '@angular/common';
 
 @Component({
 	selector: 'app-register',
 	standalone: true,
 	imports: [
+		NgIf,
+		NgFor,
 		ReactiveFormsModule,
 		LowerCasePipe,
 		MatFormFieldModule,
@@ -27,7 +29,8 @@ import { LowerCasePipe } from '@angular/common';
 		MatIconModule
 	],
 	templateUrl: './register.html',
-	styleUrl: './register.scss'
+	styleUrl: './register.scss',
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Register {
 
@@ -38,13 +41,13 @@ export class Register {
 	private readonly tracker = inject(OperationTrackerService);
 
 	isLoading = false;
-	readonly roles: UserRole[] = ['ROLE_ADMIN', 'ROLE_LIBRARIAN', 'ROLE_READER'];
+	readonly roles: UserRole[] = ['ROLE_LIBRARIAN', 'ROLE_READER'];
 
 	readonly form = this.fb.nonNullable.group({
 		nombreCompleto: ['', [Validators.required, Validators.minLength(3)]],
 		correo: ['', [Validators.required, Validators.email]],
-		clave: ['', [Validators.required, Validators.minLength(6)]],
-		role: ['READER' as UserRole]
+		clave: ['', [Validators.required, Validators.minLength(8)]],
+		roles: ['', [Validators.required]]
 	});
 
 	submit(): void {
@@ -59,14 +62,20 @@ export class Register {
 			.pipe(finalize(() => (this.isLoading = false)))
 			.subscribe({
 				next: (response) => {
-					this.notifications.success('Cuenta creada con éxito, inicia sesión para continuar.');
 					this.tracker.pushRecentAction({
 						timestamp: Date.now(),
 						entity: 'USER',
 						type: 'CREATED',
 						metadata: { email: response.usuario.correo }
 					});
+				},
+				complete: () => {
+					this.notifications.success('Cuenta creada con éxito, inicia sesión para continuar.');
+					this.isLoading = false;
 					this.router.navigate(['/']);
+				},
+				error: (err) => {
+					this.notifications.error('No se pudo crear la cuenta. Verifica los datos e intenta de nuevo.');
 				}
 			});
 	}

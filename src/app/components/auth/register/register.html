@@ -1,29 +1,30 @@
 <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-6">
     <div class="grid gap-4 md:grid-cols-2">
-        <mat-form-field appearance="outline" class="md:col-span-2">
+        <mat-form-field class="md:col-span-2">
             <mat-label>Nombre completo</mat-label>
-            <input matInput formControlName="fullName" placeholder="Ej. Laura Fernández">
-            <mat-error *ngIf="form.controls.fullName.hasError('required')">El nombre es obligatorio</mat-error>
+            <input matInput formControlName="nombreCompleto" placeholder="Ej. Laura Fernández">
+            <mat-error *ngIf="form.controls.nombreCompleto.hasError('required')">El nombre es obligatorio</mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="md:col-span-2">
+        <mat-form-field class="md:col-span-2">
             <mat-label>Correo electrónico</mat-label>
-            <input matInput type="email" formControlName="email" placeholder="correo@biblioteca.com">
-            <mat-error *ngIf="form.controls.email.hasError('required')">El correo es obligatorio</mat-error>
-            <mat-error *ngIf="form.controls.email.hasError('email')">Correo inválido</mat-error>
+            <input matInput type="email" formControlName="correo" placeholder="correo@biblioteca.com">
+            <mat-error *ngIf="form.controls.correo.hasError('required')">El correo es obligatorio</mat-error>
+            <mat-error *ngIf="form.controls.correo.hasError('email')">Correo inválido</mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field>
             <mat-label>Contraseña</mat-label>
-            <input matInput type="password" formControlName="password" placeholder="Mínimo 6 caracteres">
-            <mat-error *ngIf="form.controls.password.hasError('required')">Ingresa una contraseña</mat-error>
+            <input matInput type="password" formControlName="clave" placeholder="Mínimo 8 caracteres">
+            <mat-error *ngIf="form.controls.clave.hasError('required')">Ingresa una contraseña</mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field>
             <mat-label>Rol</mat-label>
-            <mat-select formControlName="role">
-                <mat-option *ngFor="let role of roles" [value]="role">{{ role | lowercase }}</mat-option>
+            <mat-select formControlName="roles" multiple>
+                <mat-option *ngFor="let role of roles" [value]="role">{{ role }}</mat-option>
             </mat-select>
+            <mat-error *ngIf="form.controls.roles.hasError('required')">Debes seleccionar al menos un rol.</mat-error>
         </mat-form-field>
     </div>
 

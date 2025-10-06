@@ -29,6 +29,7 @@ interface NavItem {
 	imports: [
 		NgIf,
 		NgFor,
+		NgClass,
 		RouterOutlet,
 		RouterLink,
 		RouterLinkActive,
@@ -67,8 +68,8 @@ export class MainLayout {
 		{ label: 'Panel principal', icon: 'dashboard', route: '/' },
 		{ label: 'Libros', icon: 'menu_book', route: '/books' },
 		// { label: 'Préstamos', icon: 'import_contacts', route: '/loans', roles: ['ROLE_ADMIN', 'ROLE_LIBRARIAN'] },
-		{ label: 'Préstamos', icon: 'import_contacts', route: '/loans'},
-		{ label: 'Usuarios', icon: 'group', route: '/users'}
+		{ label: 'Préstamos', icon: 'import_contacts', route: '/loans', roles: ['ROLE_ADMIN', 'ROLE_LIBRARIAN'] },
+		{ label: 'Usuarios', icon: 'group', route: '/users', roles: ['ROLE_ADMIN'] }
 	];
 
 	readonly history = this.tracker.recentHistory;
@@ -86,7 +87,10 @@ export class MainLayout {
 		if (!item.roles) {
 			return true;
 		}
-		return Boolean(currentUser && item.roles.includes(currentUser.roles[0]));
+		return Boolean(
+			currentUser &&
+			currentUser.roles.some((role) => item.roles?.includes(role))
+		);
 	}
 
 	logout(): void {

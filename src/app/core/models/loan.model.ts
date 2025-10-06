@@ -14,7 +14,7 @@ export interface Loan {
 }
 
 export interface CreateLoanRequest {
-  userId: number;
-  bookId: number;
-  dueDate: string;
+  usuarioId: number;
+  libroId: number;
+  diasPrestamo: number;
 }

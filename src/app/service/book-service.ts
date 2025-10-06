@@ -1,6 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { map, tap } from 'rxjs';
-import { Book, BookFilters, BookPayload } from '../core/models/book.model';
+import { Book, BookPayload } from '../core/models/book.model';
 import { Page } from '../core/models/pagination.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
@@ -17,25 +17,13 @@ export class BookService {
 
 	readonly books = computed(() => this._books());
 
-	loadBooks(filters: BookFilters = {}) {
-		let params = new HttpParams();
-
-		Object.entries(filters).forEach(([key, value]) => {
-			if (value !== undefined && value !== null && value !== '') {
-				params = params.set(key, String(value));
-			}
-		});
-
+	loadBooks(params: { page?: number; size?: number; term?: string; category?: string; status?: string } = {}) {
+		const { page = 0, size = 10, term = '', category = '', status = 'ALL' } = params;
 		return this.http
-			.get<Page<Book>>(`${environment.apiUrl}/libros`, { params })
+			.get<Page<Book>>(
+				`${environment.apiUrl}/libros?page=${page}&size=${size}&term=${term}&category=${category}&status=${status}`
+			)
 			.pipe(
-				map((response) => ({
-					...response,
-					contenido: response.contenido.map((book) => ({
-						...book,
-						tags: book.tags ?? []
-					}))
-				})),
 				tap((response) => this._books.set(response))
 			);
 	}
@@ -54,7 +42,7 @@ export class BookService {
 					timestamp: Date.now(),
 					type: 'CREATED',
 					entity: 'BOOK',
-					metadata: { title: book.title, author: book.author }
+					metadata: { title: book.titulo, author: book.autor }
 				})
 			)
 		);
@@ -74,7 +62,7 @@ export class BookService {
 					timestamp: Date.now(),
 					type: 'UPDATED',
 					entity: 'BOOK',
-					metadata: { title: book.title }
+					metadata: { title: book.titulo }
 				})
 			)
 		);

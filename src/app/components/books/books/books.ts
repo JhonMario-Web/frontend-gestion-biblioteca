@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { Book, BookFilters, BookPayload } from '../../../core/models/book.model';
+import { Book, BookPayload } from '../../../core/models/book.model';
 import { BookDialog, BookDialogData } from '../book-dialog/book-dialog';
 import { finalize } from 'rxjs';
 import { NotificacionService } from '../../../service/notificacion-service';
@@ -52,7 +52,7 @@ export class Books {
 	readonly filterForm = this.fb.group({
 		term: this.fb.control('', { nonNullable: true }),
 		category: this.fb.control('', { nonNullable: true }),
-		status: this.fb.control<BookFilters['status']>('ALL', { nonNullable: true })
+		status: this.fb.control<string>('ALL', { nonNullable: true })
 	});
 
 	readonly isLoading = signal(false);
@@ -62,15 +62,15 @@ export class Books {
 		this.loadBooks();
 	}
 
-	loadBooks(filters: BookFilters = {}): void {
+	loadBooks(page: number = 0, size: number = 10): void {
 		this.isLoading.set(true);
 		const { term, category, status } = this.filterForm.getRawValue();
-		const request: BookFilters = {
-			page: filters.page ?? 0,
-			size: filters.size ?? 10,
+		const request = {
+			page,
+			size,
 			term,
 			category,
-			status: status as BookFilters['status']
+			status
 		};
 
 		this.bookService
@@ -80,12 +80,12 @@ export class Books {
 	}
 
 	applyFilters(): void {
-		this.loadBooks({ page: 0 });
+		this.loadBooks(0);
 	}
 
 	clearFilters(): void {
-		this.filterForm.reset({ term: '', category: '', status: 'ALL' as BookFilters['status'] });
-		this.loadBooks({ page: 0 });
+		this.filterForm.reset({ term: '', category: '', status: 'ALL' });
+		this.loadBooks(0);
 	}
 
 	openDialog(book?: Book): void {

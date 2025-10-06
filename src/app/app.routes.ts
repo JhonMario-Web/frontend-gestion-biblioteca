@@ -23,12 +23,12 @@ export const routes: Routes = [
 	{
 		path: '',
 		component: MainLayout,
-		canActivate: [],
+		canActivate: [authGuard],
 		children: [
 			{ path: '', component: Dashboard },
 			{ path: 'books', component: Books },
-			{ path: 'loans', component: Loans, canActivate: [], data: { roles: ['ADMIN', 'LIBRARIAN'] } },
-			{ path: 'users', component: Users, canActivate: [], data: { roles: ['ADMIN'] } }
+			{ path: 'loans', component: Loans, canActivate: [roleGuard], data: { roles: ['ROLE_ADMIN', 'ROLE_LIBRARIAN'] } },
+			{ path: 'users', component: Users, canActivate: [roleGuard], data: { roles: ['ROLE_ADMIN'] } }
 		]
 	},
 	{ path: '**', redirectTo: '' }

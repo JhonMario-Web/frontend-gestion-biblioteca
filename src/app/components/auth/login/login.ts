@@ -64,7 +64,7 @@ export class Login {
 			.subscribe({
 				next: (response) => {
 					console.log(response);
-					this.notifications.success(`¡Hola de nuevo, ${response.usuario}!`);
+					this.notifications.success(`¡Hola de nuevo, ${response.usuario.nombreCompleto}!`);
 					this.tracker.pushRecentAction({
 						timestamp: Date.now(),
 						entity: 'AUTH',

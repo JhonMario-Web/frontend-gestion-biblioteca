@@ -12,11 +12,13 @@
         </div>
 
         <nav class="px-3 py-4 space-y-1">
-            <a *ngFor="let item of navItems" mat-list-item [routerLink]="item.route" routerLinkActive="text-dark"
-                class="menu-item">
-                <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-                <span matListItemTitle>{{ item.label }}</span>
-            </a>
+            <ng-container *ngFor="let item of navItems">
+                <a *ngIf="shouldDisplay(item)" mat-list-item [routerLink]="item.route" routerLinkActive="text-dark"
+                    [ngClass]="{'hidden': !shouldDisplay(item)}" class="menu-item">
+                    <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+                    <span matListItemTitle>{{ item.label }}</span>
+                </a>
+            </ng-container>
         </nav>
 
         <div class="px-6 pb-6">

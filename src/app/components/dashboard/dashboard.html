@@ -75,13 +75,11 @@
                 <div *ngFor="let book of highlightedBooks()" class="rounded-xl border border-slate-200 p-4">
                     <div class="flex items-start justify-between">
                         <div>
-                            <p class="text-base font-semibold text-slate-900">{{ book.title }}</p>
-                            <p class="text-sm text-slate-500">{{ book.author }} · {{ book.category }}</p>
+                            <p class="text-base font-semibold text-slate-900">{{ book.titulo }}</p>
+                            <p class="text-sm text-slate-500">{{ book.autor }} · {{ book.categoria }}</p>
                         </div>
-                        <mat-chip color="primary" selected>{{ book.availableCopies }}/{{ book.totalCopies }}</mat-chip>
+                        <mat-chip color="primary" selected>{{ book.copiasDisponibles }}/{{ book.copiasTotales }}</mat-chip>
                     </div>
-                    <p class="mt-2 text-sm text-slate-600 line-clamp-3">{{ book.synopsis || 'Sinopsis no disponible.' }}
-                    </p>
                 </div>
                 <p *ngIf="highlightedBooks().length === 0" class="text-sm text-slate-500">Aún no hay libros cargados.
                 </p>
@@ -122,7 +120,7 @@
                     'bg-amber-100 text-amber-700': loan.estado === 'QUEUED',
                     'bg-rose-100 text-rose-700': loan.estado === 'OVERDUE'
                   }">
-                                    {{ loan.estado | lowercase }}
+                                    {{ loan.estado }}
                                 </span>
                             </td>
                         </tr>

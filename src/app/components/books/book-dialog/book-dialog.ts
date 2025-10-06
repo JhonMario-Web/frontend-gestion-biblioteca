@@ -9,6 +9,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { NgIf } from '@angular/common';
 
 export interface BookDialogData {
   title: string;
@@ -18,6 +19,7 @@ export interface BookDialogData {
 @Component({
 	selector: 'app-book-dialog',
 	imports: [
+		NgIf,
 		MatDialogModule,
 		ReactiveFormsModule,
 		MatFormFieldModule,
@@ -38,48 +40,28 @@ export class BookDialog {
 	constructor(@Inject(MAT_DIALOG_DATA) public data: BookDialogData) { }
 
 	readonly form = this.fb.nonNullable.group({
-		title: ['', [Validators.required, Validators.minLength(3)]],
-		author: ['', [Validators.required]],
+		titulo: ['', [Validators.required, Validators.minLength(3)]],
+		autor: ['', [Validators.required]],
 		isbn: ['', [Validators.required, Validators.minLength(6)]],
-		category: ['', Validators.required],
-		publishedYear: [new Date().getFullYear(), [Validators.required, Validators.min(1900)]],
-		totalCopies: [1, [Validators.required, Validators.min(1)]],
-		availableCopies: [{ value: 1, disabled: true }],
-		synopsis: [''],
-		tags: [[] as string[]]
+		categoria: ['', Validators.required],
+		anioPublicacion: [0, [Validators.required, Validators.min(1900)]],
+		copiasTotales: [0, [Validators.required, Validators.min(1)]],
+		copiasDisponibles: [0, [Validators.required, Validators.min(1)]],
 	});
 
 	ngOnInit(): void {
 		if (this.data.book) {
 			this.form.patchValue({
 				...this.data.book,
-				tags: this.data.book.tags ?? [],
-				availableCopies: this.data.book.availableCopies
+				copiasDisponibles: this.data.book.copiasDisponibles
 			});
 		}
 
-		this.form.controls.totalCopies.valueChanges.subscribe((value) => {
+		this.form.controls.copiasTotales.valueChanges.subscribe((value) => {
 			if (!this.data.book) {
-				this.form.controls.availableCopies.setValue(value ?? 1, { emitEvent: false });
+				this.form.controls.copiasDisponibles.setValue(value ?? 1, { emitEvent: false });
 			}
 		});
-	}
-
-	addTag(event: Event): void {
-		event.preventDefault();
-		const input = event.target as HTMLInputElement;
-		const value = input.value.trim();
-		if (!value) {
-			return;
-		}
-		const tags = [...this.form.controls.tags.value, value];
-		this.form.controls.tags.setValue(tags);
-		input.value = '';
-	}
-
-	removeTag(tag: string): void {
-		const tags = this.form.controls.tags.value.filter((item) => item !== tag);
-		this.form.controls.tags.setValue(tags);
 	}
 
 	submit(): void {
@@ -90,14 +72,13 @@ export class BookDialog {
 
 		const value = this.form.getRawValue();
 		const payload: BookPayload = {
-			title: value.title,
-			author: value.author,
+			titulo: value.titulo,
+			autor: value.autor,
 			isbn: value.isbn,
-			category: value.category,
-			publishedYear: value.publishedYear,
-			totalCopies: value.totalCopies,
-			synopsis: value.synopsis,
-			tags: value.tags
+			categoria: value.categoria,
+			anioPublicacion: value.anioPublicacion,
+			copiasTotales: value.copiasTotales,
+			copiasDisponibles: value.copiasDisponibles,
 		};
 
 		this.dialogRef.close(payload);
