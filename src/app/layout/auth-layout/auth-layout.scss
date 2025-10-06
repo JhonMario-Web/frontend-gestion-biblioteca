@@ -1,0 +1,16 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(14, 165, 233, 0.08));
+}
+
+section {
+  transition: all 0.4s ease;
+}
+
+@media (max-width: 768px) {
+  section:first-child {
+    min-height: 40vh;
+    padding: 3rem 1.5rem;
+  }
+}

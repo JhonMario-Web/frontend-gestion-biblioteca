@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+
+th {
+  @apply bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500;
+  padding: 1rem;
+}
+
+td {
+  padding: 1rem;
+}
+
+mat-chip {
+  text-transform: uppercase;
+}

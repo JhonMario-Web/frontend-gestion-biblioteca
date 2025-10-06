@@ -1,0 +1,81 @@
+<section class="space-y-6">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+            <h2 class="text-2xl font-semibold text-slate-900">Gestión de usuarios</h2>
+            <p class="text-sm text-slate-500">
+                {{ totalUsers() }} usuarios registrados · {{ inactiveUsers() }} desactivados
+            </p>
+        </div>
+        <div class="rounded-full bg-primary-50 px-4 py-2 text-sm font-medium text-primary-700">
+            Control de roles y permisos activos
+        </div>
+    </div>
+
+    <div class="overflow-x-auto rounded-3xl border border-slate-200 bg-white shadow-lg">
+        <table mat-table [dataSource]="users()" class="w-full min-w-[680px]">
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Nombre</th>
+                <td mat-cell *matCellDef="let user">
+                    <div class="font-semibold text-slate-900">{{ user.nombreCompleto }}</div>
+                    <p class="text-xs text-slate-500">ID {{ user.id }}</p>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef>Correo</th>
+                <td mat-cell *matCellDef="let user">{{ user.correo }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="role">
+                <th mat-header-cell *matHeaderCellDef>Rol</th>
+                <td mat-cell *matCellDef="let user">
+                    <mat-chip color="primary" selected>{{ user.roles }}</mat-chip>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>Estado</th>
+                <td mat-cell *matCellDef="let user">
+                    <span class="rounded-full px-3 py-1 text-xs font-semibold" [ngClass]="{
+              'bg-emerald-100 text-emerald-700': user.activo,
+              'bg-rose-100 text-rose-700': !user.activo
+            }">
+                        {{ user.activo ? 'ACTIVO' : 'INACTIVO' }}
+                    </span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="createdAt">
+                <th mat-header-cell *matHeaderCellDef>Registro</th>
+                <td mat-cell *matCellDef="let user">{{ user.fechaRegistro | date:'dd/MM/yyyy' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let user" class="text-right">
+                    <button mat-icon-button [matMenuTriggerFor]="menu">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="showDetails(user)">
+                            <mat-icon>visibility</mat-icon>
+                            <span>Ver detalle</span>
+                        </button>
+                        <button mat-menu-item (click)="deactivate(user)" [disabled]="!user.active">
+                            <mat-icon>person_off</mat-icon>
+                            <span>Desactivar</span>
+                        </button>
+                    </mat-menu>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            <tr *ngIf="users().length === 0">
+                <td [attr.colspan]="displayedColumns.length" class="px-4 py-6 text-center text-sm text-slate-500">
+                    Aún no hay usuarios registrados.
+                </td>
+            </tr>
+        </table>
+    </div>
+</section>

@@ -1,0 +1,64 @@
+<h2 mat-dialog-title class="text-xl font-semibold text-slate-800">{{ data.title }}</h2>
+<form [formGroup]="form" (ngSubmit)="submit()" mat-dialog-content class="space-y-4">
+    <div class="grid gap-4 md:grid-cols-2">
+        <mat-form-field class="md:col-span-2">
+            <mat-label>Título</mat-label>
+            <input matInput formControlName="title" placeholder="Ej. Cien años de soledad">
+        </mat-form-field>
+
+        <mat-form-field class="md:col-span-2">
+            <mat-label>Autor</mat-label>
+            <input matInput formControlName="author" placeholder="Gabriel García Márquez">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>ISBN</mat-label>
+            <input matInput formControlName="isbn" placeholder="978-0307474728">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Categoría</mat-label>
+            <mat-select formControlName="category">
+                <mat-option value="Novela">Novela</mat-option>
+                <mat-option value="Ciencia">Ciencia</mat-option>
+                <mat-option value="Historia">Historia</mat-option>
+                <mat-option value="Infantil">Infantil</mat-option>
+                <mat-option value="Tecnología">Tecnología</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Año de publicación</mat-label>
+            <input matInput type="number" formControlName="publishedYear">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Ejemplares</mat-label>
+            <input matInput type="number" formControlName="totalCopies">
+        </mat-form-field>
+
+        <mat-form-field class="md:col-span-2">
+            <mat-label>Sinopsis</mat-label>
+            <textarea matInput rows="3" formControlName="synopsis"></textarea>
+        </mat-form-field>
+    </div>
+
+    <div  class="pb-3">
+        <p class="text-sm font-semibold text-slate-600">Etiquetas</p>
+        <div class="mt-2 flex flex-wrap gap-2">
+            <mat-chip *ngFor="let tag of form.controls.tags.value" (removed)="removeTag(tag)" [removable]="true">
+                {{ tag }}
+                <button matChipRemove type="button">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-chip>
+        </div>
+        <input placeholder="Añadir etiqueta"
+            class="mt-3 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none"
+            (keydown.enter)="addTag($event)">
+    </div>
+</form>
+<mat-dialog-actions align="end" class="mt-6">
+    <button mat-stroked-button mat-dialog-close>Cancelar</button>
+    <button mat-flat-button color="primary" (click)="submit()">Guardar</button>
+</mat-dialog-actions>

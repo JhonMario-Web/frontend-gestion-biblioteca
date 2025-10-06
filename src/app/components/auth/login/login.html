@@ -1,0 +1,38 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="space-y-6">
+    <mat-form-field class="w-full">
+        <mat-label>Correo electrónico</mat-label>
+        <input matInput type="email" formControlName="correo" placeholder="ejemplo@dominio.com">
+        <mat-error *ngIf="form.controls.correo.hasError('required')">El correo es obligatorio</mat-error>
+        <mat-error *ngIf="form.controls.correo.hasError('email')">Correo inválido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-full">
+        <mat-label>Contraseña</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="clave"
+            placeholder="Ingresa tu contraseña">
+        <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="form.controls.clave.hasError('required')">La contraseña es obligatoria</mat-error>
+        <mat-error *ngIf="form.controls.clave.hasError('minlength')">
+            Debe tener al menos 6 caracteres
+        </mat-error>
+    </mat-form-field>
+
+    <div class="flex items-center justify-between text-sm text-slate-600">
+        <mat-checkbox formControlName="remember">Recordarme</mat-checkbox>
+        <a routerLink="/auth/recover" class="font-medium text-primary-600 hover:text-primary-700" tabindex="-1">
+            ¿Olvidaste tu contraseña?
+        </a>
+    </div>
+
+    <button mat-flat-button color="primary" class="w-full py-2 font-semibold" type="submit" [disabled]="isLoading">
+        <mat-progress-spinner *ngIf="isLoading" diameter="20" mode="indeterminate" class="mr-2"></mat-progress-spinner>
+        <span *ngIf="!isLoading">Ingresar</span>
+        <span *ngIf="isLoading">Validando credenciales...</span>
+    </button>
+
+    <p class="text-center text-sm text-slate-500">
+        Al iniciar sesión aceptas nuestras políticas de uso responsable de la biblioteca.
+    </p>
+</form>

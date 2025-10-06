@@ -1,0 +1,32 @@
+:host {
+  display: block;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+mat-card {
+  border-radius: 1.25rem;
+}
+
+mat-chip {
+  text-transform: capitalize;
+}
+
+[mat-card-avatar] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  mat-icon {
+    font-size: 20px; // Puedes ajustar el tamaño, por ejemplo 1.25rem o 24px
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+  }
+}

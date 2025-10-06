@@ -1,0 +1,56 @@
+:host {
+  display: block;
+  height: 100vh;
+}
+
+mat-sidenav {
+  backdrop-filter: blur(12px);
+}
+
+mat-toolbar {
+  @apply shadow-md;
+}
+
+mat-sidenav-container {
+  background: linear-gradient(180deg, #eef2ff 0%, #f8fafc 100%);
+}
+
+.mat-mdc-list-item.mat-mdc-list-item-disabled {
+  opacity: 0.5;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 48px;
+  padding-left: 12px;
+  padding-right: 12px;
+  transition: background 0.4s, color 0.4s; // transición lenta
+
+  mat-icon {
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 4px;
+    transition: color 0.4s;
+  }
+
+  span[matListItemTitle] {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    transition: color 0.4s;
+  }
+
+  &:hover {
+    background: #e0e7ff;
+    color: #1e293b;
+
+    mat-icon,
+    span[matListItemTitle] {
+      color: #1e293b;
+    }
+  }
+}

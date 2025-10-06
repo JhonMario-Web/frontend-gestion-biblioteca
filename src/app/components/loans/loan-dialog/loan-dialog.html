@@ -1,0 +1,31 @@
+<h2 mat-dialog-title class="text-xl font-semibold text-slate-800">Registrar préstamo</h2>
+<form [formGroup]="form" (ngSubmit)="submit()" mat-dialog-content class="space-y-4">
+    <mat-form-field class="w-full">
+        <mat-label>Usuario</mat-label>
+        <mat-select formControlName="userId">
+            <mat-option *ngFor="let user of data.users" [value]="user.id">
+                {{ user.fullName }} · {{ user.role | lowercase }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="w-full">
+        <mat-label>Libro</mat-label>
+        <mat-select formControlName="bookId">
+            <mat-option *ngFor="let book of data.books" [value]="book.id">
+                {{ book.title }} ({{ book.availableCopies }} disponibles)
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="w-full">
+        <mat-label>Fecha de devolución</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="dueDate">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+</form>
+<mat-dialog-actions align="end">
+    <button mat-stroked-button mat-dialog-close>Cancelar</button>
+    <button mat-flat-button color="primary" (click)="submit()">Guardar</button>
+</mat-dialog-actions>

@@ -1,0 +1,43 @@
+<div class="flex min-h-screen flex-col lg:flex-row">
+    <section
+        class="relative flex flex-1 items-center justify-center bg-gradient-to-br from-primary-600 via-primary-500 to-primary-700 p-12 text-white">
+        <div class="max-w-lg">
+            <h1 class="text-4xl font-bold leading-tight">Bienvenido a la biblioteca inteligente</h1>
+            <p class="mt-4 text-lg text-white/80">
+                Gestiona el catálogo, controla préstamos, administra usuarios y visualiza estadísticas en un
+                solo lugar. Construido con Angular, Angular Material y Tailwind CSS.
+            </p>
+            <div class="mt-10 grid gap-3 text-sm text-white/70">
+                <div class="flex items-center gap-3">
+                    <mat-icon>task_alt</mat-icon>
+                    <span>Estructuras de datos lineales para seguimiento de operaciones.</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <mat-icon>verified</mat-icon>
+                    <span>Seguridad con autenticación JWT y control de roles.</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <mat-icon>stacked_line_chart</mat-icon>
+                    <span>Indicadores interactivos para decisiones rápidas.</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="flex flex-1 items-center justify-center bg-white p-6 lg:p-12">
+        <div class="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-8 shadow-xl">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-semibold uppercase tracking-[0.3em] text-primary-500">Biblioteca</p>
+                    <h2 class="text-2xl font-bold text-slate-900">Accede al sistema</h2>
+                </div>
+                <a routerLink="/auth/register" class="text-sm font-medium text-primary-600 hover:text-primary-700">
+                    ¿Nuevo usuario?
+                </a>
+            </div>
+            <div class="mt-6">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </section>
+</div>

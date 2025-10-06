@@ -1,0 +1,120 @@
+<section class="space-y-6">
+    <form [formGroup]="filterForm"
+        class="flex flex-col gap-4 rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-lg lg:flex-row lg:items-center">
+        <div class="flex-1 grid gap-4 md:grid-cols-3">
+            <mat-form-field>
+                <mat-label>Buscar</mat-label>
+                <input matInput formControlName="term" placeholder="Título, autor o ISBN">
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Categoría</mat-label>
+                <mat-select formControlName="category">
+                    <mat-option value="">Todas</mat-option>
+                    <mat-option value="Novela">Novela</mat-option>
+                    <mat-option value="Ciencia">Ciencia</mat-option>
+                    <mat-option value="Historia">Historia</mat-option>
+                    <mat-option value="Infantil">Infantil</mat-option>
+                    <mat-option value="Tecnología">Tecnología</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Estado</mat-label>
+                <mat-select formControlName="status">
+                    <mat-option value="ALL">Todos</mat-option>
+                    <mat-option value="AVAILABLE">Disponible</mat-option>
+                    <mat-option value="BORROWED">Prestado</mat-option>
+                    <mat-option value="RESERVED">Reservado</mat-option>
+                    <mat-option value="INACTIVE">Inactivo</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="flex gap-3">
+            <button mat-stroked-button type="button" color="primary" (click)="clearFilters()">Limpiar</button>
+            <button mat-flat-button type="button" color="primary" (click)="applyFilters()">Aplicar filtros</button>
+        </div>
+    </form>
+
+    <div class="flex items-center justify-between">
+        <div>
+            <h2 class="text-2xl font-semibold text-slate-900">Catálogo de libros</h2>
+            <p class="text-sm text-slate-500">{{ totalBooks() }} libros registrados en el sistema.</p>
+        </div>
+        <button mat-flat-button type="button" color="primary" (click)="openDialog()">
+            <mat-icon>add</mat-icon>
+            Nuevo libro
+        </button>
+    </div>
+
+    <div class="overflow-x-auto rounded-3xl border border-slate-200 bg-white shadow-lg">
+        <table mat-table [dataSource]="books()?.contenido ?? []" class="w-full min-w-[720px]">
+            <ng-container matColumnDef="title">
+                <th mat-header-cell *matHeaderCellDef>Título</th>
+                <td mat-cell *matCellDef="let book">
+                    <div class="font-semibold text-slate-900">{{ book.titulo }}</div>
+                    <p class="text-xs text-slate-500">ISBN {{ book.isbn }}</p>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="author">
+                <th mat-header-cell *matHeaderCellDef>Autor</th>
+                <td mat-cell *matCellDef="let book">{{ book.autor }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="category">
+                <th mat-header-cell *matHeaderCellDef>Categoría</th>
+                <td mat-cell *matCellDef="let book">{{ book.categoria }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="copies">
+                <th mat-header-cell *matHeaderCellDef>Ejemplares</th>
+                <td mat-cell *matCellDef="let book">
+                    <mat-chip color="primary" selected>{{ book.copiasDisponibles }}/{{ book.copiasTotales }}</mat-chip>
+                </td>
+            </ng-container>
+
+            <!-- <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>Estado</th>
+                <td mat-cell *matCellDef="let book">
+                    <span class="rounded-full px-3 py-1 text-xs font-semibold" [ngClass]="{
+              'bg-primary-100 text-primary-700': book.estado === 'AVAILABLE',
+              'bg-amber-100 text-amber-700': book.estado === 'RESERVED',
+              'bg-rose-100 text-rose-700': book.estado === 'BORROWED',
+              'bg-slate-200 text-slate-700': book.estado === 'INACTIVE'
+            }">
+                        {{ book.estado | lowercase }}
+                    </span>
+                </td>
+            </ng-container> -->
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let book" class="text-right">
+                    <button mat-icon-button [matMenuTriggerFor]="actionsMenu">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #actionsMenu="matMenu">
+                        <button mat-menu-item (click)="openDialog(book)">
+                            <mat-icon>edit</mat-icon>
+                            <span>Editar</span>
+                        </button>
+                        <button mat-menu-item (click)="deleteBook(book)">
+                            <mat-icon>delete</mat-icon>
+                            <span>Eliminar</span>
+                        </button>
+                    </mat-menu>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            <tr *ngIf="(books()?.contenido ?? []).length === 0">
+                <td [attr.colspan]="displayedColumns.length" class="px-4 py-6 text-center text-sm text-slate-500">
+                    No se encontraron libros con los criterios seleccionados.
+                </td>
+            </tr>
+        </table>
+    </div>
+</section>

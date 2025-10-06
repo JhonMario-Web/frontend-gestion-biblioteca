@@ -1,0 +1,83 @@
+<mat-sidenav-container class="h-screen bg-slate-100">
+    <mat-sidenav #drawer [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="!(isHandset$ | async)"
+        class="w-72 bg-slate-950 text-white">
+        <div class="flex items-center gap-3 px-6 py-6 border-b border-primary/10">
+            <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-500 text-white/100">
+                <mat-icon>library_books</mat-icon>
+            </span>
+            <div>
+                <p class="text-sm uppercase tracking-widest text-dark/60">Sistema de biblioteca</p>
+                <p class="text-lg font-semibold">Biblioteca Central</p>
+            </div>
+        </div>
+
+        <nav class="px-3 py-4 space-y-1">
+            <a *ngFor="let item of navItems" mat-list-item [routerLink]="item.route" routerLinkActive="text-dark"
+                class="menu-item">
+                <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+                <span matListItemTitle>{{ item.label }}</span>
+            </a>
+        </nav>
+
+        <div class="px-6 pb-6">
+            <p class="text-xs uppercase tracking-wide">Historial reciente</p>
+            <div class="mt-3 space-y-3 max-h-60 overflow-y-auto pr-2">
+                <div *ngIf="history().length === 0" class="rounded-lg border border-white/10 px-4 py-3 text-sm">
+                    Aún no hay actividad registrada.
+                </div>
+                <div *ngFor="let item of history()"
+                    class="rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm">
+                    <p class="font-semibold text-dark flex items-center gap-2">
+                        <mat-icon class="text-primary-200 text-base">history</mat-icon>
+                        {{ item.type | lowercase }} · {{ item.entity | lowercase }}
+                    </p>
+                    <p class="text-dark/70" *ngIf="item.metadata?.['title'] as bookTitle">
+                        {{ bookTitle }}
+                    </p>
+                    <p class="text-dark/60"
+                        *ngIf="!item.metadata?.['title'] && item.metadata?.['bookTitle'] as loanTitle">
+                        {{ loanTitle }}
+                    </p>
+                    <p class="text-xs text-dark/50" *ngIf="item.metadata?.['email'] as email">
+                        {{ email }}
+                    </p>
+                    <p class="text-xs text-dark/50">
+                        {{ item.timestamp | date:'dd/MM HH:mm' }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="flex h-full flex-col">
+        <mat-toolbar color="primary" class="sticky top-0 z-40 backdrop-blur">
+            <button mat-icon-button (click)="drawer.toggle()" *ngIf="(isHandset$ | async)">
+                <mat-icon>menu</mat-icon>
+            </button>
+            <span class="flex-1 text-lg font-semibold">{{ user()?.nombreCompleto || 'Usuario' }}</span>
+            <button mat-icon-button [matMenuTriggerFor]="profileMenu" matTooltip="Perfil de usuario">
+                <mat-icon>account_circle</mat-icon>
+            </button>
+            <mat-menu #profileMenu="matMenu">
+                <div class="px-4 py-3">
+                    <p class="text-sm font-semibold">{{ user()?.nombreCompleto }}</p>
+                    <p class="text-xs text-slate-500">{{ user()?.correo }}</p>
+                </div>
+                <button mat-menu-item disabled>
+                    <mat-icon>person</mat-icon>
+                    <span>Mi perfil</span>
+                </button>
+                <button mat-menu-item (click)="logout()">
+                    <mat-icon>logout</mat-icon>
+                    <span>Cerrar sesión</span>
+                </button>
+            </mat-menu>
+        </mat-toolbar>
+
+        <div class="flex-1 overflow-y-auto p-6">
+            <div class="mx-auto max-w-7xl">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

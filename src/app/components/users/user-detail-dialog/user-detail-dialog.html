@@ -1,0 +1,33 @@
+<h2 mat-dialog-title class="flex items-center gap-3 text-xl font-semibold text-slate-800">
+    <mat-icon class="text-primary-500">person</mat-icon>
+    Perfil de {{ data.user.fullName }}
+</h2>
+<mat-dialog-content class="space-y-4">
+    <div class="grid gap-3 text-sm">
+        <div class="rounded-xl bg-slate-50 p-4">
+            <p class="text-xs uppercase tracking-widest text-slate-500">Correo</p>
+            <p class="text-base font-medium text-slate-900">{{ data.user.email }}</p>
+        </div>
+        <div class="rounded-xl bg-slate-50 p-4">
+            <p class="text-xs uppercase tracking-widest text-slate-500">Rol</p>
+            <mat-chip color="primary" selected>{{ data.user.role | lowercase }}</mat-chip>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+            <div class="rounded-xl bg-slate-50 p-4">
+                <p class="text-xs uppercase tracking-widest text-slate-500">Préstamos activos</p>
+                <p class="text-lg font-semibold text-slate-900">{{ data.user.loansActive }}</p>
+            </div>
+            <div class="rounded-xl bg-slate-50 p-4">
+                <p class="text-xs uppercase tracking-widest text-slate-500">Préstamos totales</p>
+                <p class="text-lg font-semibold text-slate-900">{{ data.user.totalLoans }}</p>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3 text-xs text-slate-500">
+            <p>Registrado: {{ data.user.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
+            <p *ngIf="data.user.updatedAt">Actualizado: {{ data.user.updatedAt | date:'dd/MM/yyyy HH:mm' }}</p>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-stroked-button mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>
