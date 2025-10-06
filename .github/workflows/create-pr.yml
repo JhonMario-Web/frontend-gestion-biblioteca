@@ -1,0 +1,48 @@
+name: Crear PR automático
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [main]   # ejecuta al hacer push a main (puedes cambiarlo)
+  schedule:
+    - cron: "0 12 * * 1"   # opcional: lunes 12:00 UTC
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  crear-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurar autor del commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      # 👉 Simula un cambio
+      - name: Generar cambio
+        run: |
+          echo "Actualizado por bot: $(date -u)" >> AUTOGEN.md
+
+      - name: Actualizar rama remota antes de push
+        run: |
+          git fetch origin bot/auto-actualizacion || true
+          git checkout -B bot/auto-actualizacion
+          git merge origin/bot/auto-actualizacion || true
+          git add -A
+          git commit -m "chore(bot): actualización automática" || echo "Nada que commitear"
+          git push -u origin bot/auto-actualizacion
+
+      - name: Crear Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: bot/auto-actualizacion
+          title: "chore(bot): actualización automática"
+          body: "PR creado automáticamente por el workflow."
+          commit-message: "chore(bot): actualización automática"
+          labels: bot, automatizado
+          assignees: jhonmario-argumedo
